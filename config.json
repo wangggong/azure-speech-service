@@ -1,5 +1,5 @@
 {
     "SPEECH_KEY": "904a9b88805142bfa1ceb884dbe4d7f3",
     "SPEECH_REGION": "eastasia",
-    "default_voice_name": "zh-CN-XiaochenNeural"
+    "DEFAULT_VOICE_NAME": "zh-CN-XiaochenNeural"
 }

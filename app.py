@@ -56,7 +56,8 @@ def create_txt_to_speech_task(text):
     print("start trans, id = {0}, text = {1}".format(id, text))
     speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
     audio_config = None
-    speech_config.speech_synthesis_voice_name = app.config.get("default_voice_name")
+    voice_name = app.config.get("DEFAULT_VOICE_NAME")
+    speech_config.speech_synthesis_voice_name = voice_name
     speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
     result = speech_synthesizer.speak_text_async(format_ssml(text, voice_name, rate, pitch)).get()
