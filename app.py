@@ -42,7 +42,7 @@ def txt_to_speech():
 def format_ssml(text, voice_name, rate, pitch):
     return '''<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">
         <voice name="{0}">
-        <prosody rate="{1}" pitch="{2}">{3}</prosody></voice></speak>'''.format(voice_name, rate, pitch, text)
+        <prosody rate="{1}%" pitch="{2}%">{3}</prosody></voice></speak>'''.format(voice_name, rate, pitch, text)
 
 def get_txt_to_speech(id):
     print('GET audio file, id = {0}'.format(id))
@@ -60,7 +60,7 @@ def create_txt_to_speech_task(text):
     speech_config.speech_synthesis_voice_name = voice_name
     speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
-    result = speech_synthesizer.speak_text_async(format_ssml(text, voice_name, rate, pitch)).get()
+    result = speech_synthesizer.speak_ssml_async(format_ssml(text, voice_name, rate, pitch)).get()
     if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
         if result.reason == speechsdk.ResultReason.Canceled:
             detail = result.cancellation_details
