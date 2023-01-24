@@ -58,15 +58,15 @@ def get_txt_to_speech(id):
 def create_txt_to_speech_task():
     id = str(uuid.uuid1())
     print("start trans, id = {0}".format(id))
-    result = speech_synthesizer.speak_text_async(text).get()
-    if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
-        if result.reason == speechsdk.ResultReason.Canceled:
-            detail = result.cancellation_details
-        print("Speech synthesized for text '{0}' failed, reason: {1}, detail: {2}".format(text, result.reason, detail))
-        return {"errno": 500, "errmsg": result}
-    stream = speechsdk.AudioDataStream(result)
-    stream.detach_input()
-    stream.save_to_wav_file_async(os.path.join(app.root_path, 'resources', '{0}.wav'.format(id))).get()
+    # result = speech_synthesizer.speak_text_async(text).get()
+    # if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
+    #     if result.reason == speechsdk.ResultReason.Canceled:
+    #         detail = result.cancellation_details
+    #     print("Speech synthesized for text '{0}' failed, reason: {1}, detail: {2}".format(text, result.reason, detail))
+    #     return {"errno": 500, "errmsg": result}
+    # stream = speechsdk.AudioDataStream(result)
+    # stream.detach_input()
+    # stream.save_to_wav_file_async(os.path.join(app.root_path, 'resources', '{0}.wav'.format(id))).get()
     return {"errno": 0, "id" : id}
 
 
