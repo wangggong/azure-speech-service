@@ -50,7 +50,7 @@ def create_txt_to_speech_task(text):
     speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
     audio_config = None
     speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
-    speech_config.set_speech_synthesis_output_format(speechsdk.Audio16Khz32KBitRateMonoMp3)
+    speech_config.set_speech_synthesis_output_format(speechsdk.SpeechSynthesisOutputFormat.Audio16Khz32KBitRateMonoMp3)
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
     result = speech_synthesizer.speak_text_async(text).get()
     if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
