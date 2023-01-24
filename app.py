@@ -36,7 +36,7 @@ def txt_to_speech():
     if request.method == 'GET':
         return get_txt_to_speech(request.args.get('id'))
     elif request.method == 'POST':
-        return create_txt_to_speech_task(request.json.get("text"))
+        return create_txt_to_speech_task(request.form.get("text"))
 
 
 def get_txt_to_speech(id):
@@ -60,7 +60,7 @@ def create_txt_to_speech_task(text):
     stream = speechsdk.AudioDataStream(result)
     stream.detach_input()
     stream.save_to_wav_file(os.path.join(app.root_path, 'resource', '{0}.wav'.format(id)))
-    return {"errno": 0, "id": id}
+    return send_from_directory(os.path.join(app.root_path, "resource"), "{0}.wav".format(id), as_attachment=True)
 
 
 if __name__ == '__main__':
