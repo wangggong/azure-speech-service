@@ -48,7 +48,7 @@ def txt_to_speech():
     if request.method == 'GET':
         return get_txt_to_speech(request.args.get('id'))
     elif request.method == 'POST':
-        return create_txt_to_speech_task()
+        return create_txt_to_speech_task(request.json.get("text"))
 
 
 def get_txt_to_speech(id):
@@ -56,26 +56,23 @@ def get_txt_to_speech(id):
     return send_from_directory(os.path.join(app.root_path, "resource"), "{0}.wav".format(id), as_attachment=True)
 
 
-def create_txt_to_speech_task():
+def create_txt_to_speech_task(text):
     id = str(uuid.uuid1())
-    print("start trans, id = {0}".format(id))
+    print("start trans, id = {0}, text = {1}".format(id, text))
     speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
     audio_config = None
     speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
-    try:
-        result = speech_synthesizer.speak_text_async(text).get()
-    except Exception as ex:
-        return {"id": id, "error": ex}
-    # if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
-    #     if result.reason == speechsdk.ResultReason.Canceled:
-    #         detail = result.cancellation_details
-    #     print("Speech synthesized for text '{0}' failed, reason: {1}, detail: {2}".format(text, result.reason, detail))
-    #     return {"errno": 500, "errmsg": result}
-    # stream = speechsdk.AudioDataStream(result)
-    # stream.detach_input()
-    # stream.save_to_wav_file_async(os.path.join(app.root_path, 'resource', '{0}.wav'.format(id))).get()
-    return {"errno": 0, "id" : id}
+    result = speech_synthesizer.speak_text_async(text).get()
+    if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
+        if result.reason == speechsdk.ResultReason.Canceled:
+            detail = result.cancellation_details
+        print("Speech synthesized for text '{0}' failed, reason: {1}, detail: {2}".format(text, result.reason, detail))
+        return {"errno": 500, "errmsg": result}
+    stream = speechsdk.AudioDataStream(result)
+    stream.detach_input()
+    stream.save_to_wav_file(os.path.join(app.root_path, 'resource', '{0}.wav'.format(id)))
+    return {"errno": 0, "id": id}
 
 
 if __name__ == '__main__':
