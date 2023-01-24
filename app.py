@@ -43,11 +43,12 @@ def txt_to_speech():
 
 
 def get_txt_to_speech(id):
-    return send_from_directory("/tmp", "{0}.mp3".format(id), as_attachment=True)
+    return send_from_directory(os.path.join(app.root_path, "resource"), "{0}.mp3".format(id), as_attachment=True)
 
 
 def create_txt_to_speech_task():
     id = str(uuid.uuid1())
+    print("start downloading, id = {0}".format(id))
     r = requests.post(
         url="https://{0}.tts.speech.microsoft.com/cognitiveservices/v1".format(app.config.get("SPEECH_REGION")),
         headers={
@@ -57,9 +58,11 @@ def create_txt_to_speech_task():
             "User-Agent": 'python',
         },
         data=format_txt_to_speech_request())
+    print("end downloading, id = {0}, status = {1}".format(id, r.status_code))
     if r.status_code != 200:
         return {"errno": r.status_code, "errmsg": r.content}
-    with open("/tmp/{0}.mp3".format(id), 'w') as f:
+    print("start saving, id = {0}".format(id))
+    with open(os.path.join(app.root_path, "resource", "{0}.mp3".format(id)), 'w') as f:
         f.write(r.content)
     return {"errno": 0, "id" : id}
 
