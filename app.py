@@ -9,11 +9,11 @@ app = Flask(__name__)
 app.config.from_json("config.json")
 
 
-speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
-# audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
-audio_config = None
-speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
-speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+# speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
+# # audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
+# audio_config = None
+# speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
+# speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
 
 
@@ -59,8 +59,12 @@ def get_txt_to_speech(id):
 def create_txt_to_speech_task():
     id = str(uuid.uuid1())
     print("start trans, id = {0}".format(id))
-    result = speech_synthesizer.speak_text_async(text).get()
-    return {"id": id, "reason": result.reason}
+    speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
+    audio_config = None
+    speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
+    speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+    # result = speech_synthesizer.speak_text_async(text).get()
+    return {"id": id}
     # if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
     #     if result.reason == speechsdk.ResultReason.Canceled:
     #         detail = result.cancellation_details
