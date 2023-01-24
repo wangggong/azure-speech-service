@@ -9,10 +9,10 @@ app = Flask(__name__)
 app.config.from_json("config.json")
 
 
-speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
-audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
-speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
-speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+# speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
+# audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
+# speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
+# speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
 
 
