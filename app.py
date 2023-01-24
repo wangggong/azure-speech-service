@@ -63,8 +63,10 @@ def create_txt_to_speech_task():
     audio_config = None
     speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
-    # result = speech_synthesizer.speak_text_async(text).get()
-    return {"id": id}
+    try:
+        result = speech_synthesizer.speak_text_async(text).get()
+    except Exception as ex:
+        return {"id": id, "error": ex}
     # if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
     #     if result.reason == speechsdk.ResultReason.Canceled:
     #         detail = result.cancellation_details
