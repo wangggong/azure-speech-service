@@ -16,9 +16,17 @@
                     <label for="text" class="form-label fw-bold fs-5">Enter Text:</label>
 
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-1">
-                        <textarea cols="50" name="text" form="usrform">输入文案...</textarea>
+                        <input id="rate" type="range" min="-100" max="200" value="0" step="1">速率</input>
                     </div>
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-2">
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-2">
+                        <input id="pitch" type="range" min="-50" max="50" value="0" step="1">音调</input>
+                    </div>
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-3">
+                        <textarea rows="50" cols="30" name="text" form="usrform">输入文案...</textarea>
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-4">
                         <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Submit</button>
                     </div>
                 </div>
