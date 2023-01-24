@@ -59,7 +59,8 @@ def get_txt_to_speech(id):
 def create_txt_to_speech_task():
     id = str(uuid.uuid1())
     print("start trans, id = {0}".format(id))
-    # result = speech_synthesizer.speak_text_async(text).get()
+    result = speech_synthesizer.speak_text_async(text).get()
+    return {"id": id, "reason": result.reason}
     # if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
     #     if result.reason == speechsdk.ResultReason.Canceled:
     #         detail = result.cancellation_details
