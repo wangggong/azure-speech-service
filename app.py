@@ -1,8 +1,14 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
-import requests
+import azure.cognitiveservices.speech as speechsdk
 import os
 import uuid
+
+
+speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
+audio_config = speechsdk.audio.AudioOutputConfig(use_default_speaker=True)
+speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
+speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
 
 
 app = Flask(__name__)
@@ -44,42 +50,23 @@ def txt_to_speech():
 
 
 def get_txt_to_speech(id):
-    print('GET mp3 file, id = {0}'.format(id))
-    return send_from_directory(os.path.join(app.root_path, "resource"), "{0}.mp3".format(id), as_attachment=True)
+    print('GET audio file, id = {0}'.format(id))
+    return send_from_directory(os.path.join(app.root_path, "resource"), "{0}.wav".format(id), as_attachment=True)
 
 
 def create_txt_to_speech_task():
     id = str(uuid.uuid1())
-    print("start downloading, id = {0}".format(id))
-    r = requests.post(
-        url="https://{0}.tts.speech.microsoft.com/cognitiveservices/v1".format(app.config.get("SPEECH_REGION")),
-        headers={
-            "Ocp-Apim-Subscription-Key": app.config.get("SPEECH_KEY"),
-            "Content-Type": "application/ssml+xml",
-            "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
-            "User-Agent": 'python',
-        },
-        data=format_txt_to_speech_request())
-    print("end downloading, id = {0}, status = {1}".format(id, r.status_code))
-    if r.status_code != 200:
-        return {"errno": r.status_code, "errmsg": r.content}
-    print("start saving, id = {0}".format(id))
-    with open(os.path.join(app.root_path, "resource", "{0}.mp3".format(id)), 'w') as f:
-        f.write(r.content)
+    print("start trans, id = {0}".format(id))
+    result = speech_synthesizer.speak_text_async(text).get()
+    if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
+        if result.reason == speechsdk.ResultReason.Canceled:
+            detail = result.cancellation_details
+        print("Speech synthesized for text '{0}' failed, reason: {1}, detail: {2}".format(text, result.reason, detail))
+        return {"errno": 500, "errmsg": result}
+    stream = speechsdk.AudioDataStream(result)
+    stream.detach_input()
+    stream.save_to_wav_file_async(os.path.join(app.root_path, 'resources', '{0}.wav'.format(id))).get()
     return {"errno": 0, "id" : id}
-
-
-def format_txt_to_speech_request():
-    rate = request.json.get('rate')
-    pitch = request.json.get('pitch')
-    text = request.json.get('text').encode('utf-8')
-    return '''<speak version="1.0"
-        <voice xml:lang="zh-CN" xml:gender="Female" name="zh-CN-XiaochenNeural">
-            <prosody rate="{0}" pitch="{1}">
-                {2}
-            </prosody>
-        </voice>
-    </speak>'''.format(rate, pitch, text)
 
 
 if __name__ == '__main__':
