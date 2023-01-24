@@ -36,6 +36,7 @@ def hello():
 
 @app.route('/txt2speech', methods=['GET', 'POST'])
 def txt_to_speech():
+    print('Request for txt2speech, method = ' + request.method)
     if request.method == 'GET':
         return get_txt_to_speech(request.args.get('id'))
     elif request.method == 'POST':
@@ -43,6 +44,7 @@ def txt_to_speech():
 
 
 def get_txt_to_speech(id):
+    print('GET mp3 file, id = {0}'.format(id))
     return send_from_directory(os.path.join(app.root_path, "resource"), "{0}.mp3".format(id), as_attachment=True)
 
 
