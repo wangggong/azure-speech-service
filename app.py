@@ -20,7 +20,7 @@ app.config.from_json("config.json")
 @app.route('/')
 def index():
     print('Request for index page received')
-    return render_template('index.html')
+    return render_template('txt2speech.html')
 
 
 @app.route('/favicon.ico')
