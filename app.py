@@ -6,13 +6,13 @@ import uuid
 
 
 app = Flask(__name__)
-config = app.config.from_json("config.json")
+app.config.from_json("config.json")
 
 
 @app.route('/')
 def index():
-   print('Request for index page received')
-   return render_template('index.html')
+    print('Request for index page received')
+    return render_template('index.html')
 
 
 @app.route('/favicon.ico')
@@ -24,14 +24,14 @@ def favicon():
 
 @app.route('/hello', methods=['POST'])
 def hello():
-   name = request.form.get('name')
+    name = request.form.get('name')
 
-   if name:
-       print('Request for hello page received with name=%s' % name)
-       return render_template('hello.html', name = name)
-   else:
-       print('Request for hello page received with no name or blank name -- redirecting')
-       return redirect(url_for('index'))
+    if name:
+        print('Request for hello page received with name=%s' % name)
+        return render_template('hello.html', name = name)
+    else:
+        print('Request for hello page received with no name or blank name -- redirecting')
+        return redirect(url_for('index'))
 
 
 @app.route('/txt2speech', methods=['GET', 'POST'])
@@ -47,14 +47,11 @@ def get_txt_to_speech(id):
 
 
 def create_txt_to_speech_task():
-    '''
-curl --location --request POST "https://${SPEECH_REGION}.tts.speech.microsoft.com/cognitiveservices/v1" \
---data-raw  > output.mp3 '''
     id = str(uuid.uuid1())
     r = requests.post(
-        url="https://{0}.tts.speech.microsoft.com/cognitiveservices/v1".format(config["SPEECH_REGION"]),
+        url="https://{0}.tts.speech.microsoft.com/cognitiveservices/v1".format(app.config.get("SPEECH_REGION")),
         headers={
-            "Ocp-Apim-Subscription-Key": config["SPEECH_KEY"],
+            "Ocp-Apim-Subscription-Key": app.config.get("SPEECH_KEY"),
             "Content-Type": "application/ssml+xml",
             "X-Microsoft-OutputFormat": "audio-16khz-128kbitrate-mono-mp3",
             "User-Agent": 'python',
@@ -70,14 +67,14 @@ curl --location --request POST "https://${SPEECH_REGION}.tts.speech.microsoft.co
 def format_txt_to_speech_request():
     rate = request.json.get('rate')
     pitch = request.json.get('pitch')
-    text = request.json.get('text')
+    text = request.json.get('text').encode('utf-8')
     return '''<speak version="1.0"
-    <voice xml:lang="zh-CN" xml:gender="Female" name="zh-CN-XiaochenNeural">
-        <prosody rate="{0}" pitch="{1}">
-            {2}
-        </prosody>
-    </voice>
-</speak>'''.format(rate, pitch, text)
+        <voice xml:lang="zh-CN" xml:gender="Female" name="zh-CN-XiaochenNeural">
+            <prosody rate="{0}" pitch="{1}">
+                {2}
+            </prosody>
+        </voice>
+    </speak>'''.format(rate, pitch, text)
 
 
 if __name__ == '__main__':
