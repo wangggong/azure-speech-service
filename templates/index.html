@@ -13,22 +13,65 @@
             </div>
             <form id="usrform" method="post" action="{{url_for('txt_to_speech')}}">
                 <div class="col-md-6 mx-auto text-center">
-                    <label for="text" class="form-label fw-bold fs-5">Enter Text:</label>
-
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-1">
-                        <input name="rate" type="range" min="-100" max="200" value="0" step="1"onchange="document.getElementById('current_rate').innerHTML=value">速率</input>
-                        <span id="current_rate"></span>
+                        <label for="voice-name-select" class="form-label fw-bold fs-5">Enter Text:</label>
+                        <select name="voice-name" id="voice-name-select">
+                            <option value="zh-CN-XiaochenNeural">Xiaochen (Neural) - 晓辰</option>
+                            <option value="zh-CN-XiaoxiaoNeural">Xiaoxiao (Neural) - 晓晓</option>
+                            <option value="zh-CN-YunyangNeural">Yunyang (Neural) - 云扬</option>
+                            <option value="zh-CN-XiaohanNeural">Xiaohan (Neural) - 晓涵</option>
+                            <option value="zh-CN-XiaomoNeural">Xiaomo (Neural) - 晓墨</option>
+                            <option value="zh-CN-XiaoqiuNeural">Xiaoqiu (Neural) - 晓秋</option>
+                            <option value="zh-CN-XiaoruiNeural">Xiaorui (Neural) - 晓睿</option>
+                            <option value="zh-CN-XiaoshuangNeural">Xiaoshuang (Neural) - 晓双</option>
+                            <option value="zh-CN-XiaoxuanNeural">Xiaoxuan (Neural) - 晓萱</option>
+                            <option value="zh-CN-XiaoyanNeural">Xiaoyan (Neural) - 晓颜</option>
+                            <option value="zh-CN-XiaoyouNeural">Xiaoyou (Neural) - 晓悠</option>
+                            <option value="zh-CN-YunxiNeural">Yunxi (Neural) - 云希</option>
+                            <option value="zh-CN-YunyeNeural">Yunye (Neural) - 云野</option>
+                            <option value="zh-CN-XiaomengNeural">Xiaomeng (Neural) - 晓梦 - 预览</option>
+                            <option value="zh-CN-XiaoyiNeural">Xiaoyi (Neural) - 晓伊 - 预览</option>
+                            <option value="zh-CN-XiaozhenNeural">Xiaozhen (Neural) - 晓甄 - 预览</option>
+                            <option value="zh-CN-YunfengNeural">Yunfeng (Neural) - 云枫 - 预览</option>
+                            <option value="zh-CN-YunhaoNeural">Yunhao (Neural) - 云皓 - 预览</option>
+                            <option value="zh-CN-YunjianNeural">Yunjian (Neural) - 云健 - 预览</option>
+                            <option value="zh-CN-YunxiaNeural">Yunxia (Neural) - 云夏 - 预览</option>
+                            <option value="zh-CN-YunzeNeural">Yunze (Neural) - 云泽 - 预览</option>
+                        </select>
                     </div>
 
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-2">
-                        <input name="pitch" type="range" min="-50" max="50" value="0" step="1" onchange="document.getElementById('current_pitch').innerHTML=value">音调</input>
-                        <span id="current_pitch"></span>
+                        <input name="rate" type="range" list="rate-tickmarks" min="-100" max="200" value="60" step="20" onchange="document.getElementById('current_rate').innerHTML=value">速率</input>
+                        <datalist id="rate-tickmarks">
+                            <option value="-100"></option>
+                            <option value="0"></option>
+                            <option value="100"></option>
+                            <option value="200"></option>
+                        </datalist>
+                        <span id="current_rate"></span>
                     </div>
 
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-3">
-                        <textarea rows="40" cols="30" name="text" form="usrform">输入文案...</textarea>
+                        <input name="pitch" type="range" list="pitch-tickmarks" min="-50" max="50" value="0" step="10" onchange="document.getElementById('current_pitch').innerHTML=value">音调</input>
+                        <datalist id="pitch-tickmarks">
+                            <option value="-50"></option>
+                            <option value="-30"></option>
+                            <option value="-10"></option>
+                            <option value="10"></option>
+                            <option value="30"></option>
+                            <option value="50"></option>
+                        </datalist>
+                        <span id="current_pitch"></span>
                     </div>
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-4">
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-4">
+                        <label for="text" class="form-label fw-bold fs-5">输入文案:</label>
+                    </div>
+
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-5">
+                        <textarea rows="12" cols="32" name="text" form="usrform"></textarea>
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-6">
                         <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Submit</button>
                     </div>
                 </div>
