@@ -1,12 +1,14 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import azure.cognitiveservices.speech as speechsdk
+from .game import *
 import os
 import uuid
 
 
 app = Flask(__name__)
 app.config.from_json("config.json")
+games = {}
 
 
 # speech_config = speechsdk.SpeechConfig(subscription=app.config.get("SPEECH_KEY"), region=app.config.get("SPEECH_REGION"))
@@ -14,7 +16,6 @@ app.config.from_json("config.json")
 # audio_config = None
 # speech_config.speech_synthesis_voice_name = 'zh-CN-XiaochenNeural'
 # speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
-
 
 
 @app.route('/')
@@ -39,10 +40,38 @@ def txt_to_speech():
         return create_txt_to_speech_task(request.form.get("text"))
 
 
+@app.route('/games/oce/<int:player_count>', methods=['GET', 'POST'])
+def create_oce_game(player_count):
+    print('create oce game, player count {player_count}')
+    game = Game(player_count)
+    games[game.id] = game
+    return {"errno": 200, "id": game.id}
+
+
+@app.route('/games/oce/<string:_id>', methods=['GET'])
+def get_oce_game(_id):
+    print('get oce game, method = ' + request.method)
+    game = games.get(_id)
+    if not game:
+        return {"errno": 404}
+    return {"errno": 200, "detail": game}
+
+
+@app.route('/games/oce/<string:_id>/add_player/{string:alias}', methods=['GET', 'POST'])
+def add_player(_id, alias):
+    print(f'add player {alias} for game {_id}')
+    games[game.id] = game
+    if not game:
+        return {"errno": 404}
+    game.add_player(Player(alias))
+    return {"errno": 200}
+
+
 def format_ssml(text, voice_name, rate, pitch):
     return '''<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">
         <voice name="{0}">
         <prosody rate="{1}%" pitch="{2}%">{3}</prosody></voice></speak>'''.format(voice_name, rate, pitch, text)
+
 
 def get_txt_to_speech(id):
     print('GET audio file, id = {0}'.format(id))
