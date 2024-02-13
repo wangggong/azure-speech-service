@@ -14,7 +14,9 @@
             <form id="usrform" method="post" action="{{url_for('txt_to_speech')}}">
                 <div class="col-md-6 mx-auto text-center">
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-1">
-                        <label for="voice-name-select" class="form-label fw-bold fs-5">Enter Text:</label>
+                        <label for="voice-name-select" class="form-label fw-bold fs-5">输入角色:</label>
+                    </div>
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-2">
                         <select name="voice-name" id="voice-name-select">
                             <option value="zh-CN-XiaochenNeural">Xiaochen (Neural) - 晓辰</option>
                             <option value="zh-CN-XiaoxiaoNeural">Xiaoxiao (Neural) - 晓晓</option>
@@ -40,7 +42,7 @@
                         </select>
                     </div>
 
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-2">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-3">
                         <input name="rate" type="range" list="rate-tickmarks" min="-100" max="200" value="60" step="20" onchange="document.getElementById('current_rate').innerHTML=value">速率</input>
                         <datalist id="rate-tickmarks">
                             <option value="-100"></option>
@@ -51,7 +53,7 @@
                         <span id="current_rate"></span>
                     </div>
 
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-3">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-4">
                         <input name="pitch" type="range" list="pitch-tickmarks" min="-50" max="50" value="0" step="10" onchange="document.getElementById('current_pitch').innerHTML=value">音调</input>
                         <datalist id="pitch-tickmarks">
                             <option value="-50"></option>
@@ -64,14 +66,14 @@
                         <span id="current_pitch"></span>
                     </div>
 
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-4">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-5">
                         <label for="text" class="form-label fw-bold fs-5">输入文案:</label>
                     </div>
 
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-5">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center align-items-center my-6">
                         <textarea rows="12" cols="32" name="text" form="usrform"></textarea>
                     </div>
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-6">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center my-7">
                         <button type="submit" class="btn btn-primary btn-lg px-4 gap-3">Submit</button>
                     </div>
                 </div>
