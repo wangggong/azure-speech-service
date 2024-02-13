@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 import azure.cognitiveservices.speech as speechsdk
-from .game import *
+from game import *
 import os
 import uuid
 
@@ -54,7 +54,7 @@ def get_oce_game(_id):
     game = games.get(_id)
     if not game:
         return {"errno": 404}
-    return {"errno": 200, "detail": game}
+    return {"errno": 200, "detail": str(game)}
 
 
 @app.route('/games/oce/<string:_id>/add_player/{string:alias}', methods=['GET', 'POST'])

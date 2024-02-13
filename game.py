@@ -1,4 +1,5 @@
 from enum import Enum
+import json
 import random
 import uuid
 
@@ -255,10 +256,19 @@ class Game:
         pass
 
     def __str__(self):
-        return f"Game {self.id}:\ncards={self.cards}\nincidents={self.incidents}\ncurrent_state={self.current_state}"
+        return json.dumps(self.json())
 
     def __repr__(self):
         return f"Game(id={self.id})"
+
+    def json(self):
+        return {
+            'id': str(self.id),
+            'incidents': self.incidents,
+            'cards': self.cards,
+            'players': self.players,
+            'current_state': self.current_state.name
+        }
 
 
 if __name__ == '__main__':
